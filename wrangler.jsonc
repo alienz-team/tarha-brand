@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tarha-brand",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "tarha-brand"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+  // Secrets (set with `npx wrangler secret put <NAME>` or in the dashboard — never committed):
+  //   DATABASE_URL, ADMIN_PASSWORD, ADMIN_SESSION_SECRET
+}

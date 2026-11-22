@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+
+# Next.js / OpenNext / Cloudflare build output
+.next
+.open-next
+out
+.wrangler
+*.tsbuildinfo
+next-env.d.ts
+
+# Prisma generated client (regenerated on install via postinstall)
+lib/generated
+
+# secrets — NEVER commit
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.deploy-hidden
+
+# Neon link file
+.neon
+
+# misc
+.DS_Store
+npm-debug.log*

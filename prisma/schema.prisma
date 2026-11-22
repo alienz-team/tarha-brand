@@ -1,0 +1,102 @@
+// TAR7A | طرحه — database schema (Neon Postgres)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+  // Cloudflare Workers (OpenNext) runtime; queries go through the Neon driver adapter.
+  runtime  = "cloudflare"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StockStatus {
+  IN_STOCK
+  LOW_STOCK
+  SOLD_OUT
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+model Category {
+  key       String    @id
+  label     String
+  latin     Boolean   @default(false)
+  image     String
+  sortOrder Int       @default(0)
+  /// Shown in the kinetic category rows (the 9 brand categories)
+  featured  Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id           String      @id
+  code         String      @unique
+  name         String
+  price        Int
+  categoryKey  String
+  category     Category    @relation(fields: [categoryKey], references: [key], onUpdate: Cascade)
+  /// Every category key this piece is listed under when filtering
+  tags         String[]
+  badge        String?
+  editionNo    Int         @default(1)
+  editionTotal Int         @default(50)
+  /// Unsplash photo id or full image URL
+  image        String
+  altImage     String
+  sizes        String[]
+  description  String
+  stockStatus  StockStatus @default(IN_STOCK)
+  published    Boolean     @default(true)
+  sortOrder    Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([categoryKey])
+  @@index([published, sortOrder])
+}
+
+model CustomArtOrder {
+  id           String      @id @default(cuid())
+  /// hoodie | shirt | shoes
+  piece        String
+  pieceLabel   String
+  color        String
+  size         String
+  idea         String
+  details      String?
+  qty          Int         @default(1)
+  unitPrice    Int
+  total        Int
+  customerName String?
+  phone        String?
+  city         String?
+  /// studio | bag
+  source       String      @default("studio")
+  status       OrderStatus @default(NEW)
+  adminNote    String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([status, createdAt])
+}
+
+/// Singleton store settings (id = 1)
+model Admin {
+  id             Int      @id @default(1)
+  storeName      String   @default("TAR7A | طرحه")
+  whatsappNumber String   @default("218910073418")
+  /// Announcement bar items, one per line
+  announcement   String   @default("طرحتك تجيك لاعندك\nتوصيل طرابلس وليبيا\nرسم وتصميم حسب الطلب (Make Your Hoodie & Shirt)")
+  acceptOrders   Boolean  @default(true)
+  updatedAt      DateTime @updatedAt
+}

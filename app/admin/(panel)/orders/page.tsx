@@ -85,11 +85,11 @@ export default async function OrdersPage({
               {o.details && <p className="mt-3 rounded-2xl bg-chalk p-3 text-sm">{o.details}</p>}
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line-light pt-4 text-sm">
-                <div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-bold">{o.customerName || "بدون اسم"}</span>
-                  {o.city && <span className="text-mute"> · {o.city}</span>}
+                  {o.city && <span className="text-mute">· {o.city}</span>}
                   {o.phone && (
-                    <a dir="ltr" href={`tel:${o.phone}`} className="ms-2 font-display text-brand">
+                    <a dir="ltr" href={`tel:${o.phone}`} className="font-display text-brand">
                       {o.phone}
                     </a>
                   )}
